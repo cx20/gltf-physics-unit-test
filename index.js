@@ -1,5 +1,6 @@
 const GLTF_PHYSICS_REPOSITORY = "https://github.com/eoineoineoin/glTF_Physics";
 const GLTF_PHYSICS_RAW_BASE_URL = "https://raw.githubusercontent.com/eoineoineoin/glTF_Physics/master/tests";
+const GLTF_PHYSICS_SAMPLES_SAMPLELIST_URL = "https://raw.githubusercontent.com/eoineoineoin/glTF_Physics/master/samples/samplelist.json";
 const ENGINE_BASE_URL = 'https://cx20.github.io/gltf-test';
 
 let engines = [{
@@ -112,9 +113,102 @@ TEST_FOLDERS.forEach(function(folder) {
             dataSets.forEach(function(dataSet) {
                 makeTable(dataSet);
             });
+            fetchSamples();
         }
     });
 });
+
+function fetchSamples() {
+    $.getJSON(GLTF_PHYSICS_SAMPLES_SAMPLELIST_URL, function(data) {
+        makeSamplesSection(data);
+    });
+}
+
+function makeSamplesSection(samples) {
+    var element = document.getElementById("content");
+
+    var h2 = document.createElement('h2');
+    let folderLink = document.createElement('a');
+    folderLink.textContent = "Samples";
+    folderLink.setAttribute('href', GLTF_PHYSICS_REPOSITORY + "/tree/master/samples");
+    folderLink.setAttribute('target', '_blank');
+    h2.appendChild(folderLink);
+    element.appendChild(h2);
+
+    var table = document.createElement('table');
+    table.className = "table table-bordered table-sm table-striped";
+
+    var thead = makeSamplesTableHead();
+    table.appendChild(thead);
+
+    var tbody = makeSamplesTableBody(samples);
+    table.appendChild(tbody);
+
+    element.appendChild(table);
+}
+
+function makeSamplesTableHead() {
+    var thead = document.createElement('thead');
+    var tr = document.createElement('tr');
+
+    var th1 = document.createElement('th');
+    th1.textContent = "Title";
+    tr.appendChild(th1);
+
+    var th2 = document.createElement('th');
+    th2.textContent = "Description";
+    tr.appendChild(th2);
+
+    for (let i = 0; i < engines.length; i++) {
+        var th = document.createElement('th');
+        th.textContent = engines[i].name;
+        tr.appendChild(th);
+    }
+
+    thead.appendChild(tr);
+    return thead;
+}
+
+function makeSamplesTableBody(samples) {
+    var tbody = document.createElement('tbody');
+
+    for (let i = 0; i < samples.length; i++) {
+        let sample = samples[i];
+        var tr = document.createElement('tr');
+
+        // Title with link to GitHub
+        var tdTitle = document.createElement('td');
+        let a = document.createElement('a');
+        a.textContent = sample.title;
+        a.setAttribute('href', sample.link);
+        a.setAttribute('target', '_blank');
+        tdTitle.appendChild(a);
+        tr.appendChild(tdTitle);
+
+        // Description
+        var tdDesc = document.createElement('td');
+        tdDesc.textContent = sample.description;
+        tr.appendChild(tdDesc);
+
+        // Engine links
+        for (let j = 0; j < engines.length; j++) {
+            var tdEngine = document.createElement('td');
+            let engine = engines[j];
+            let viewLink = document.createElement('a');
+            let viewUri = engine.path + "?url=" + sample.asset + "&scale=0.5";
+            viewLink.textContent = "View";
+            viewLink.title = engine.name + " : " + sample.title;
+            viewLink.setAttribute('href', viewUri);
+            viewLink.setAttribute('target', '_blank');
+            tdEngine.appendChild(viewLink);
+            tr.appendChild(tdEngine);
+        }
+
+        tbody.appendChild(tr);
+    }
+
+    return tbody;
+}
 
 function makeTable(dataSet) {
     var element = document.getElementById("content");
