@@ -4,7 +4,7 @@ Unit tests for multiple glTF Physics implementations
 This repository allows you to compare any glTF library using the test models provided by [glTF_Physics](https://github.com/eoineoineoin/glTF_Physics).
 Try specifying the glTF library you want to compare in the URL argument.
 
-https://cx20.github.io/gltf-physics-unit-test/?engines=Three.js,Babylon.js,Filament,PlayCanvas
+https://cx20.github.io/gltf-physics-unit-test/?engines=Three.js,Babylon.js,Filament,PlayCanvas,Khronos_glTF_Viewer
 
 ## Test Models
 
@@ -22,5 +22,5 @@ The following test model sets from [eoineoineoin/glTF_Physics](https://github.co
 
 The following glTF viewers/engines can be specified via the `engines` URL parameter:
 
-Three.js, Babylon.js, Filament, PlayCanvas, Cesium, ArcGISJSAPI, AMAPJSAPI, Grimore.js, xeogl, minimal-gltf-loader, Khronos glTF Viewer, ClayGL, Hilo3d, X3DOM, CZPG.js, GLBoost, RedCube.js, RedGL, Ashes, Unity, pex, Rhodonite
+Three.js, Babylon.js, Filament, PlayCanvas, Cesium, ArcGISJSAPI, AMAPJSAPI, Grimore.js, xeogl, minimal-gltf-loader, Khronos_glTF_Viewer, ClayGL, Hilo3d, X3DOM, CZPG.js, GLBoost, RedCube.js, RedGL, Ashes, Unity, pex, Rhodonite
 
