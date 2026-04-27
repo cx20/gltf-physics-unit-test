@@ -79,6 +79,106 @@ const TEST_FOLDERS = [
     "RigidBodies_MotionProperties"
 ];
 
+// Extra columns per test folder. Each entry defines column headers and a
+// per-model values array (indexed by the model order in Manifest.json).
+// Source: README.md of each test folder in the eoineoineoin/glTF_Physics repo.
+const TEST_FOLDER_METADATA = {
+    "RigidBodies_ColliderTypeMatrix": {
+        columns: ["Shape Type A", "Shape Type B"],
+        rows: [
+            ["Sphere", "Sphere"],
+            ["Sphere", "Box"],
+            ["Sphere", "Capsule"],
+            ["Sphere", "Cylinder"],
+            ["Sphere", "Convex hull"],
+            ["Sphere", "Triangle mesh"],
+            ["Box", "Sphere"],
+            ["Box", "Box"],
+            ["Box", "Capsule"],
+            ["Box", "Cylinder"],
+            ["Box", "Convex hull"],
+            ["Box", "Triangle mesh"],
+            ["Capsule", "Sphere"],
+            ["Capsule", "Box"],
+            ["Capsule", "Capsule"],
+            ["Capsule", "Cylinder"],
+            ["Capsule", "Convex hull"],
+            ["Capsule", "Triangle mesh"],
+            ["Cylinder", "Sphere"],
+            ["Cylinder", "Box"],
+            ["Cylinder", "Capsule"],
+            ["Cylinder", "Cylinder"],
+            ["Cylinder", "Convex hull"],
+            ["Cylinder", "Triangle mesh"],
+            ["Convex hull", "Sphere"],
+            ["Convex hull", "Box"],
+            ["Convex hull", "Capsule"],
+            ["Convex hull", "Cylinder"],
+            ["Convex hull", "Convex hull"],
+            ["Convex hull", "Triangle mesh"],
+            ["Triangle mesh", "Sphere"],
+            ["Triangle mesh", "Box"],
+            ["Triangle mesh", "Capsule"],
+            ["Triangle mesh", "Cylinder"],
+            ["Triangle mesh", "Convex hull"],
+            ["Triangle mesh", "Triangle mesh"]
+        ]
+    },
+    "RigidBodies_CollisionFilter": {
+        columns: ["Description"],
+        rows: [
+            ["Validating CollideWithSystems, single collider case"],
+            ["Validating NotCollideWithSystems, single collider case"],
+            ["Validating CollideWithSystems, multiple collider case"],
+            ["Validating NotCollideWithSystems, multiple collider case"]
+        ]
+    },
+    "RigidBodies_Joint": {
+        columns: ["Description"],
+        rows: [
+            ["Fixed joint"],
+            ["Ball and socket joint"],
+            ["Hinge joint with free rotation axis = 0"],
+            ["Hinge joint with free rotation axis = 1"],
+            ["Hinge joint with free rotation axis = 2"],
+            ["Prismatic joint"],
+            ["Prismatic joint, collision enabled"],
+            ["Stiff spring joint"],
+            ["Revolute joint with offset center of mass"],
+            ["Revolute joint with angular drive"],
+            ["Prismatic joint, with linear drive"]
+        ]
+    },
+    "RigidBodies_Materials": {
+        columns: ["Description"],
+        rows: [
+            ["Compare behaviour of high and low restitution materials"],
+            ["Validate physics material combine mode"],
+            ["Compare behavior of high and low friction materials"]
+        ]
+    },
+    "RigidBodies_MotionProperties": {
+        columns: [
+            "Gravity Factor",
+            "Linear Velocity",
+            "Angular Velocity",
+            "Is Kinematic",
+            "Mass",
+            "Inertia"
+        ],
+        rows: [
+            ["0.0", "", "", "", "", ""],
+            ["0.0", "[1.0, 0.0, 0.0]", "", "", "", ""],
+            ["0.0", "", "[1.0, 0.0, 0.0]", "", "", ""],
+            ["0.0", "[0.0, 0.0, 1.0]", "", "", "", ""],
+            ["0.0", "", "[0.0, 0.0, 1.0]", "", "", ""],
+            ["", "", "", "True", "", ""],
+            ["", "", "", "", "", ""],
+            ["", "", "", "", "1.0", "[0.0, 0.0, 0.0]"]
+        ]
+    }
+};
+
 let pendingCount = TEST_FOLDERS.length;
 let dataSets = [];
 
@@ -225,7 +325,7 @@ function makeTable(dataSet) {
     var table = document.createElement('table');
     table.className = "table table-bordered table-sm table-striped";
 
-    var thead = makeTableHead();
+    var thead = makeTableHead(dataSet);
     table.appendChild(thead);
 
     var tbody = makeTableBody(dataSet);
@@ -234,7 +334,7 @@ function makeTable(dataSet) {
     element.appendChild(table);
 }
 
-function makeTableHead() {
+function makeTableHead(dataSet) {
     var thead = document.createElement('thead');
     var tr = document.createElement('tr');
 
@@ -245,6 +345,15 @@ function makeTableHead() {
     var th2 = document.createElement('th');
     th2.textContent = "Screenshot";
     tr.appendChild(th2);
+
+    var metadata = TEST_FOLDER_METADATA[dataSet.folder];
+    if (metadata) {
+        for (let i = 0; i < metadata.columns.length; i++) {
+            var thMeta = document.createElement('th');
+            thMeta.textContent = metadata.columns[i];
+            tr.appendChild(thMeta);
+        }
+    }
 
     for (let i = 0; i < engines.length; i++) {
         var th = document.createElement('th');
@@ -288,6 +397,17 @@ function makeTableBody(dataSet) {
             tdPic.appendChild(img);
         }
         tr.appendChild(tdPic);
+
+        // Metadata columns (Description / Shape Type / motion properties etc.)
+        let metadata = TEST_FOLDER_METADATA[folder];
+        if (metadata) {
+            let row = (metadata.rows && metadata.rows[i]) || [];
+            for (let k = 0; k < metadata.columns.length; k++) {
+                var tdMeta = document.createElement('td');
+                tdMeta.textContent = row[k] != null ? row[k] : "";
+                tr.appendChild(tdMeta);
+            }
+        }
 
         for (let j = 0; j < engines.length; j++) {
             var tdEngine = document.createElement('td');
