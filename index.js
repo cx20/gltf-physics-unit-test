@@ -201,6 +201,44 @@ function queryEngines() {
 
 queryEngines();
 
+const TAB_KEYS = TEST_FOLDERS.concat(["Samples"]);
+buildTabs(TAB_KEYS);
+
+function buildTabs(keys) {
+    let tabList = document.getElementById('testTabs');
+    let tabContent = document.getElementById('testTabsContent');
+    for (let i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        let id = 'tab-' + key.replace(/[^A-Za-z0-9_-]/g, '_');
+
+        let li = document.createElement('li');
+        li.className = 'nav-item';
+        let a = document.createElement('a');
+        a.className = 'nav-link' + (i === 0 ? ' active' : '');
+        a.id = id + '-tab';
+        a.setAttribute('data-toggle', 'tab');
+        a.setAttribute('href', '#' + id);
+        a.setAttribute('role', 'tab');
+        a.setAttribute('aria-controls', id);
+        a.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+        a.textContent = key;
+        li.appendChild(a);
+        tabList.appendChild(li);
+
+        let pane = document.createElement('div');
+        pane.className = 'tab-pane fade' + (i === 0 ? ' show active' : '');
+        pane.id = id;
+        pane.setAttribute('role', 'tabpanel');
+        pane.setAttribute('aria-labelledby', id + '-tab');
+        tabContent.appendChild(pane);
+    }
+}
+
+function getTabPane(key) {
+    let id = 'tab-' + key.replace(/[^A-Za-z0-9_-]/g, '_');
+    return document.getElementById(id);
+}
+
 TEST_FOLDERS.forEach(function(folder) {
     let url = GLTF_PHYSICS_RAW_BASE_URL + "/" + folder + "/Manifest.json";
     $.getJSON(url, function(data) {
@@ -225,7 +263,7 @@ function fetchSamples() {
 }
 
 function makeSamplesSection(samples) {
-    var element = document.getElementById("content");
+    var element = getTabPane("Samples");
 
     var h2 = document.createElement('h2');
     let folderLink = document.createElement('a');
@@ -311,10 +349,10 @@ function makeSamplesTableBody(samples) {
 }
 
 function makeTable(dataSet) {
-    var element = document.getElementById("content");
+    let folder = dataSet.folder;
+    var element = getTabPane(folder);
 
     var h2 = document.createElement('h2');
-    let folder = dataSet.folder;
     let folderLink = document.createElement('a');
     folderLink.textContent = folder;
     folderLink.setAttribute('href', GLTF_PHYSICS_REPOSITORY + "/tree/master/tests/" + folder);

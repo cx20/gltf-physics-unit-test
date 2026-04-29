@@ -10,10 +10,28 @@
 table {
     border-collapse: collapse;
 }
+body {
+    padding: 16px;
+}
+.view-on-github {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 1030;
+}
+.nav-tabs {
+    margin-bottom: 16px;
+}
+.tab-pane > h2:first-child {
+    margin-top: 8px;
+}
 </style>
 </head>
 <body>
-<div id="content"></div>
+<a class="btn btn-outline-primary view-on-github" href="https://github.com/cx20/gltf-physics-unit-test/" target="_blank" rel="noopener">View on GitHub</a>
+<h1>glTF Physics Unit Tests</h1>
+<ul class="nav nav-tabs" id="testTabs" role="tablist"></ul>
+<div class="tab-content" id="testTabsContent"></div>
 
 <script src="index.js"></script>
 </body>
