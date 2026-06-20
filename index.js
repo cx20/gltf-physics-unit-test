@@ -186,7 +186,7 @@ let pendingCount = TEST_FOLDERS.length;
 let dataSets = [];
 
 function queryEngines() {
-    let res = location.search.match(/engines=([\w\.,]+)/);
+    let res = location.search.match(/engines=([\w\.,-]+)/);
     if (res && res[1]) {
         let engineDict = {};
         engines.forEach(function(engine) {
