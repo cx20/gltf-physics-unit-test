@@ -10,8 +10,8 @@ let engines = [{
     name: 'Babylon.js',
     path: ENGINE_BASE_URL + '/examples/babylonjs/index.html'
 }, {
-    name: 'Babylon.js-Lite',
-    path: ENGINE_BASE_URL + '/examples/babylonjs-lite/index.html'
+    name: 'Babylon-Lite',
+    path: ENGINE_BASE_URL + '/examples/babylon-lite/index.html'
 }, {
     name: 'Filament',
     path: ENGINE_BASE_URL + '/examples/filament/index.html'
