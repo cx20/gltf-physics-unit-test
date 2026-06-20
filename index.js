@@ -206,6 +206,22 @@ queryEngines();
 
 const TAB_KEYS = TEST_FOLDERS.concat(["Samples"]);
 buildTabs(TAB_KEYS);
+setupTabHashSync();
+
+function setupTabHashSync() {
+    // Reflect the active tab in the URL hash when a tab is shown.
+    $('#testTabs a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        history.replaceState(null, '', e.target.getAttribute('href'));
+    });
+
+    // Restore the tab referenced by the URL hash on load.
+    if (location.hash) {
+        let link = document.querySelector('#testTabs a[href="' + location.hash + '"]');
+        if (link) {
+            $(link).tab('show');
+        }
+    }
+}
 
 function buildTabs(keys) {
     let tabList = document.getElementById('testTabs');
